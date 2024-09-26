@@ -4,17 +4,15 @@ import PackageDescription
 let package = Package(
     name: "home-control-api",
     platforms: [
-       .macOS(.v13)
+       .macOS(.v14)
     ],
     dependencies: [
-        // 💧 A server-side Swift web framework.
         .package(url: "https://github.com/vapor/vapor.git", from: "4.99.3"),
-        // 🗄 An ORM for SQL and NoSQL databases.
         .package(url: "https://github.com/vapor/fluent.git", from: "4.9.0"),
-        // 🐬 Fluent driver for MySQL.
         .package(url: "https://github.com/vapor/fluent-mysql-driver.git", from: "4.4.0"),
-        // 🔵 Non-blocking, event-driven networking for Swift. Used for custom executors
         .package(url: "https://github.com/apple/swift-nio.git", from: "2.65.0"),
+        .package(url: "https://github.com/vapor/apns.git", from: "4.2.0"),
+        .package(path: "../home-control-kit")
     ],
     targets: [
         .executableTarget(
@@ -25,6 +23,8 @@ let package = Package(
                 .product(name: "Vapor", package: "vapor"),
                 .product(name: "NIOCore", package: "swift-nio"),
                 .product(name: "NIOPosix", package: "swift-nio"),
+                .product(name: "VaporAPNS", package: "apns"),
+                .product(name: "HomeControlKit", package: "home-control-kit")
             ],
             swiftSettings: swiftSettings
         ),
