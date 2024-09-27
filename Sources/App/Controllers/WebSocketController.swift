@@ -14,6 +14,7 @@ struct WebSocketController: RouteCollection {
         routes.put("ws", "settings", ":id", use: webSocketSettings)
     }
 
+    @Sendable
     func webSocket(req: Request, ws: WebSocket) async {
         let registeredWebSocket = req.application.register(webSocket: ws, settings: .default)
 
@@ -24,6 +25,7 @@ struct WebSocketController: RouteCollection {
         }
     }
 
+    @Sendable
     func webSocketSettings(req: Request) async throws -> Response {
         guard let id = req.parameters.get("id", as: UUID.self) else { throw Abort(.badRequest) }
         let webSocketSettings = try req.content.decode(WebSocketSettings.self)

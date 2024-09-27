@@ -13,6 +13,8 @@ func routes(_ app: Application) throws {
         .grouped(AuthenticationTokenAuthenticator())
         .grouped(AuthenticationToken.guardMiddleware())
 
+
+    try protected.register(collection: ElectricityMeterController())
     try protected.register(collection: InverterReadingController())
     try protected.register(collection: WebSocketController())
 //        try app.register(collection: PushDeviceController())

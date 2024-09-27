@@ -8,8 +8,8 @@
 import Fluent
 import Vapor
 
-public final class AuthenticationToken: Model, Content {
-    public static let schema = "authentication_tokens"
+final class AuthenticationToken: Model, Content, @unchecked Sendable {
+    static let schema = "authentication_tokens"
 
     @ID(key: .id)
     public var id: UUID?

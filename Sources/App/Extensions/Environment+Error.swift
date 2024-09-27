@@ -9,7 +9,7 @@ import Vapor
 
 extension Environment {
     enum Error: Swift.Error {
-        case missingKey
+        case missingKey(key: String)
     }
 }
 

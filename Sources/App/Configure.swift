@@ -47,9 +47,16 @@ public func configure(_ app: Application) async throws {
     ), as: .mysql)
 
     app.migrations.add(CreateInverterReading())
-    app.migrations.add(CreateElectricityConsumerPower())
+    app.migrations.add(CreateElectricityMeter())
+    app.migrations.add(CreateElectricityMeterReadings())
     app.migrations.add(CreateAuthenticationToken())
-//        app.migrations.add(CreatePushDevice())
+
+    app.asyncCommands.use(CreateAuthenticationTokenCommand(), as: "create-authentication-token")
+
+    let encoder = JSONEncoder()
+    encoder.outputFormatting = .sortedKeys
+    encoder.dateEncodingStrategy = .iso8601
+    ContentConfiguration.global.use(encoder: encoder, for: .json)
 
     try routes(app)
 }

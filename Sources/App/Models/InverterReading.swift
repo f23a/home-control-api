@@ -9,60 +9,60 @@ import Fluent
 import Vapor
 import HomeControlKit
 
-public final class InverterReading: Model, Content {
-    public static let schema = "inverter_readings"
+final class InverterReading: Model, Content, @unchecked Sendable  {
+    static let schema = "inverter_readings"
 
     @ID(key: .id)
-    public var id: UUID?
+    var id: UUID?
 
     @Field(key: "reading_at")
-    public var readingAt: Date
+    var readingAt: Date
 
     @Field(key: "solar_to_battery")
-    public var solarToBattery: Double
+    var solarToBattery: Double
     @Field(key: "solar_to_load")
-    public var solarToLoad: Double
+    var solarToLoad: Double
     @Field(key: "solar_to_grid")
-    public var solarToGrid: Double
+    var solarToGrid: Double
 
     @Field(key: "battery_to_load")
-    public var batteryToLoad: Double
+    var batteryToLoad: Double
     @Field(key: "battery_to_grid")
-    public var batteryToGrid: Double
+    var batteryToGrid: Double
 
     @Field(key: "grid_to_battery")
-    public var gridToBattery: Double
+    var gridToBattery: Double
     @Field(key: "grid_to_load")
-    public var gridToLoad: Double
+    var gridToLoad: Double
 
     @Field(key: "battery_level")
-    public var batteryLevel: Double
+    var batteryLevel: Double
     @Field(key: "battery_health")
-    public var batteryHealth: Double
+    var batteryHealth: Double
     @Field(key: "battery_temperature")
-    public var batteryTemperature: Double
+    var batteryTemperature: Double
 
     @Field(key: "daily_pv_generation")
-    public var dailyPVGeneration: Double
+    var dailyPVGeneration: Double
     @Field(key: "daily_import_energy")
-    public var dailyImportEnergy: Double
+    var dailyImportEnergy: Double
     @Field(key: "daily_export_energy")
-    public var dailyExportEnergy: Double
+    var dailyExportEnergy: Double
     @Field(key: "daily_direct_energy_consumption")
-    public var dailyDirectEnergyConsumption: Double
+    var dailyDirectEnergyConsumption: Double
     @Field(key: "daily_battery_discharge_energy")
-    public var dailyBatteryDischargeEnergy: Double
+    var dailyBatteryDischargeEnergy: Double
 
     @Timestamp(key: "createdAt", on: .create)
-    public var createdAt: Date?
+    var createdAt: Date?
 
     @Timestamp(key: "updatedAt", on: .update)
-    public var updatedAt: Date?
+    var updatedAt: Date?
 
-    public init() { }
+    init() { }
 
-    public init(
-        id: UUID?,
+    init(
+        id: UUID? = nil,
         readingAt: Date,
         solarToBattery: Double,
         solarToLoad: Double,
@@ -100,7 +100,7 @@ public final class InverterReading: Model, Content {
     }
 }
 
-public extension InverterReading {
+extension InverterReading {
     var storedInverterReading: HomeControlKit.StoredInverterReading? {
         guard let id, let createdAt else { return nil }
         return .init(
