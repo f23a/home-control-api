@@ -17,5 +17,5 @@ func routes(_ app: Application) throws {
     try protected.register(collection: ElectricityMeterController())
     try protected.register(collection: InverterReadingController())
     try protected.register(collection: WebSocketController())
-//        try app.register(collection: PushDeviceController())
+    try protected.register(collection: PushDeviceController())
 }

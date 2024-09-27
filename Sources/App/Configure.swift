@@ -50,6 +50,7 @@ public func configure(_ app: Application) async throws {
     app.migrations.add(CreateElectricityMeter())
     app.migrations.add(CreateElectricityMeterReadings())
     app.migrations.add(CreateAuthenticationToken())
+    app.migrations.add(CreatePushDevice())
 
     app.asyncCommands.use(CreateAuthenticationTokenCommand(), as: "create-authentication-token")
 

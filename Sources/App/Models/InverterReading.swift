@@ -9,7 +9,7 @@ import Fluent
 import Vapor
 import HomeControlKit
 
-final class InverterReading: Model, Content, @unchecked Sendable  {
+final class InverterReading: Model, Content, @unchecked Sendable {
     static let schema = "inverter_readings"
 
     @ID(key: .id)
