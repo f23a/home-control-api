@@ -10,7 +10,7 @@ import Vapor
 struct CreateAuthenticationTokenCommand: AsyncCommand {
     struct Signature: CommandSignature { }
 
-    var help: String { "Create Authentication Tokne" }
+    var help: String { "Create Authentication Token" }
 
     func run(using context: CommandContext, signature: Signature) async throws {
         let authenticationToken = AuthenticationToken()
