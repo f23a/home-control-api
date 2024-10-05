@@ -50,6 +50,11 @@ struct InverterReadingController: RouteCollection {
 
         try await inverterReading.save(on: req.db)
         guard let stored = inverterReading.storedInverterReading else { throw Abort(.internalServerError) }
+
+        await req.application.webSocketRegister?.send(
+            message: WebSocketDidCreateInverterReadingMessage(inverterReading: stored)
+        )
+
         return stored
     }
 
