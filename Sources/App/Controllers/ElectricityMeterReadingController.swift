@@ -19,34 +19,34 @@ struct ElectricityMeterReadingController: RouteCollection {
     }
 
     @Sendable
-    func index(req: Request) async throws -> [StoredElectricityMeterReading] {
-        guard let electricityMeter = try await ElectricityMeter.find(req.parameters.get("id"), on: req.db) else {
+    func index(req: Request) async throws -> [Stored<HomeControlKit.ElectricityMeterReading>] {
+        guard let model = try await ElectricityMeter.find(req.parameters.get("id"), on: req.db) else {
             throw Abort(.notFound)
         }
 
-        return try await electricityMeter.$readings
+        return try await model.$readings
             .query(on: req.db)
             .sort(\.$readingAt, .descending)
             .all()
-            .compactMap { $0.storedElectricityMeterReading }
+            .compactMap { $0.stored }
     }
 
     @Sendable
-    func create(req: Request) async throws -> StoredElectricityMeterReading {
+    func create(req: Request) async throws -> Stored<HomeControlKit.ElectricityMeterReading> {
         guard let electricityMeter = try await ElectricityMeter.find(req.parameters.get("id"), on: req.db) else {
             throw Abort(.notFound)
         }
         let electricityMeterID = try electricityMeter.requireID()
         let content = try req.content.decode(HomeControlKit.ElectricityMeterReading.self)
 
-        let electricityMeterReading = ElectricityMeterReading(
+        let model = ElectricityMeterReading(
             electricityMeterID: electricityMeterID,
             readingAt: content.readingAt,
             power: content.power
         )
 
-        try await electricityMeterReading.save(on: req.db)
-        guard let stored = electricityMeterReading.storedElectricityMeterReading else {
+        try await model.save(on: req.db)
+        guard let stored = model.stored else {
             throw Abort(.internalServerError)
         }
 
@@ -54,13 +54,11 @@ struct ElectricityMeterReadingController: RouteCollection {
     }
 
     @Sendable
-    func latest(req: Request) async throws -> StoredElectricityMeterReading {
+    func latest(req: Request) async throws -> Stored<HomeControlKit.ElectricityMeterReading> {
         guard let latest = try await ElectricityMeterReading.query(on: req.db).sort(\.$readingAt, .descending).first() else {
             throw Abort(.notFound)
         }
-        guard let result = latest.storedElectricityMeterReading else { throw Abort(.internalServerError) }
+        guard let result = latest.stored else { throw Abort(.internalServerError) }
         return result
     }
 }
-
-extension StoredElectricityMeterReading: @retroactive Content { }

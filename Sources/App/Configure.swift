@@ -52,6 +52,7 @@ public func configure(_ app: Application) async throws {
     app.migrations.add(CreateAuthenticationToken())
     app.migrations.add(CreatePushDevice())
     app.migrations.add(CreateSetting())
+    app.migrations.add(CreateForceChargingRange())
 
     app.asyncCommands.use(CreateAuthenticationTokenCommand(), as: "create-authentication-token")
     app.asyncCommands.use(SendPushMessageCommand(), as: "send-push-message")

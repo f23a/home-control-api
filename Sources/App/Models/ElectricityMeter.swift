@@ -36,11 +36,11 @@ final class ElectricityMeter: Model, Content, @unchecked Sendable {
 }
 
 extension ElectricityMeter {
-    var storedElectricityMeter: StoredElectricityMeter? {
+    var stored: Stored<HomeControlKit.ElectricityMeter>? {
         guard let id, let createdAt else { return nil }
         return .init(
             id: id,
-            meter: .init(
+            value: .init(
                 title: title
             ),
             createdAt: createdAt,

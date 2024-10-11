@@ -101,11 +101,11 @@ final class InverterReading: Model, Content, @unchecked Sendable {
 }
 
 extension InverterReading {
-    var storedInverterReading: HomeControlKit.StoredInverterReading? {
+    var stored: Stored<HomeControlKit.InverterReading>? {
         guard let id, let createdAt else { return nil }
         return .init(
             id: id,
-            reading: .init(
+            value: .init(
                 readingAt: readingAt,
                 solarToBattery: solarToBattery,
                 solarToLoad: solarToLoad,

@@ -19,17 +19,17 @@ struct InverterReadingController: RouteCollection {
     }
 
     @Sendable
-    func index(req: Request) async throws -> [StoredInverterReading] {
+    func index(req: Request) async throws -> [Stored<HomeControlKit.InverterReading>] {
         try await InverterReading
             .query(on: req.db)
             .sort(\.$readingAt, .descending)
-            .all().compactMap { $0.storedInverterReading }
+            .all().compactMap { $0.stored }
     }
 
     @Sendable
-    func create(req: Request) async throws -> StoredInverterReading {
+    func create(req: Request) async throws -> Stored<HomeControlKit.InverterReading> {
         let content = try req.content.decode(HomeControlKit.InverterReading.self)
-        let inverterReading = InverterReading(
+        let model = InverterReading(
             readingAt: content.readingAt,
             solarToBattery: content.solarToBattery,
             solarToLoad: content.solarToLoad,
@@ -48,8 +48,8 @@ struct InverterReadingController: RouteCollection {
             dailyBatteryDischargeEnergy: content.dailyBatteryDischargeEnergy
         )
 
-        try await inverterReading.save(on: req.db)
-        guard let stored = inverterReading.storedInverterReading else { throw Abort(.internalServerError) }
+        try await model.save(on: req.db)
+        guard let stored = model.stored else { throw Abort(.internalServerError) }
 
         await req.application.webSocketRegister?.send(
             message: WebSocketDidCreateInverterReadingMessage(inverterReading: stored)
@@ -59,13 +59,11 @@ struct InverterReadingController: RouteCollection {
     }
 
     @Sendable
-    func latest(req: Request) async throws -> StoredInverterReading {
+    func latest(req: Request) async throws -> Stored<HomeControlKit.InverterReading> {
         guard let latest = try await InverterReading.query(on: req.db).sort(\.$readingAt, .descending).first() else {
             throw Abort(.notFound)
         }
-        guard let result = latest.storedInverterReading else { throw Abort(.internalServerError) }
+        guard let result = latest.stored else { throw Abort(.internalServerError) }
         return result
     }
 }
-
-extension StoredInverterReading: @retroactive Content { }

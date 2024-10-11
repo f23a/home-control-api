@@ -30,4 +30,4 @@ struct PushDeviceController: RouteCollection {
     }
 }
 
-extension HomeControlKit.PushDevice: @retroactive Content { }
+//extension HomeControlKit.PushDevice: @retroactive Content { }
