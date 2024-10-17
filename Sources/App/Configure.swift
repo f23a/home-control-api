@@ -53,6 +53,8 @@ public func configure(_ app: Application) async throws {
     app.migrations.add(CreatePushDevice())
     app.migrations.add(CreateSetting())
     app.migrations.add(CreateForceChargingRange())
+    app.migrations.add(CreatePushDeviceMessageTypeSettings())
+    app.migrations.add(CreateMessages())
 
     app.asyncCommands.use(CreateAuthenticationTokenCommand(), as: "create-authentication-token")
     app.asyncCommands.use(SendPushMessageCommand(), as: "send-push-message")
@@ -61,6 +63,10 @@ public func configure(_ app: Application) async throws {
     encoder.outputFormatting = .sortedKeys
     encoder.dateEncodingStrategy = .iso8601
     ContentConfiguration.global.use(encoder: encoder, for: .json)
+
+    let decoder = JSONDecoder()
+    decoder.dateDecodingStrategy = .iso8601
+    ContentConfiguration.global.use(decoder: decoder, for: .json)
 
     try routes(app)
 }

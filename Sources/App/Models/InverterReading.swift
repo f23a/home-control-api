@@ -53,10 +53,10 @@ final class InverterReading: Model, Content, @unchecked Sendable {
     @Field(key: "daily_battery_discharge_energy")
     var dailyBatteryDischargeEnergy: Double
 
-    @Timestamp(key: "createdAt", on: .create)
+    @Timestamp(key: "created_at", on: .create)
     var createdAt: Date?
 
-    @Timestamp(key: "updatedAt", on: .update)
+    @Timestamp(key: "updated_at", on: .update)
     var updatedAt: Date?
 
     init() { }

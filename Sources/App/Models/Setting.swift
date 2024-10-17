@@ -18,10 +18,10 @@ final class Setting: Model, Content, @unchecked Sendable  {
     @Field(key: "encoded_content")
     var encodedContent: String
 
-    @Timestamp(key: "createdAt", on: .create)
+    @Timestamp(key: "created_at", on: .create)
     var createdAt: Date?
 
-    @Timestamp(key: "updatedAt", on: .update)
+    @Timestamp(key: "updated_at", on: .update)
     var updatedAt: Date?
 
     init() { }

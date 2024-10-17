@@ -14,8 +14,8 @@ struct CreateElectricityMeterReadings: AsyncMigration {
             .field("electricity_meter_id", .uuid, .required, .references("electricity_meters", "id"))
             .field("reading_at", .datetime)
             .field("power", .double)
-            .field("createdAt", .datetime)
-            .field("updatedAt", .datetime)
+            .field("created_at", .datetime)
+            .field("updated_at", .datetime)
             .create()
     }
 

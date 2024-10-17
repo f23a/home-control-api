@@ -14,8 +14,8 @@ struct SettingController: RouteCollection {
         let settings = routes.grouped("settings")
 
         settings.group(":id") { setting in
-            setting.get(use: self.get)
-            setting.post(use: self.save)
+            setting.get(use: get)
+            setting.post(use: save)
         }
     }
 

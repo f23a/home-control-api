@@ -1,22 +1,28 @@
 //
-//  ElectricityMeter.swift
+//  Message.swift
 //  home-control-api
 //
-//  Created by Christoph Pageler on 27.09.24.
+//  Created by Christoph Pageler on 16.10.24.
 //
 
 import Fluent
 import Vapor
 import HomeControlKit
 
-final class ElectricityMeter: Model, Content, @unchecked Sendable {
-    static let schema = "electricity_meters"
+final class Message: Model, Content, @unchecked Sendable  {
+    static let schema = "messages"
 
     @ID(key: .id)
     var id: UUID?
 
+    @Field(key: "message_type")
+    var messageType: MessageType
+
     @Field(key: "title")
     var title: String
+
+    @Field(key: "body")
+    var body: String
 
     @Timestamp(key: "created_at", on: .create)
     var createdAt: Date?
@@ -24,24 +30,25 @@ final class ElectricityMeter: Model, Content, @unchecked Sendable {
     @Timestamp(key: "updated_at", on: .update)
     var updatedAt: Date?
 
-    @Children(for: \.$electricityMeter)
-    var readings: [ElectricityMeterReading]
-
     init() { }
 
-    init(id: UUID? = nil, title: String) {
+    init(id: UUID? = nil, messageType: MessageType, title: String, body: String) {
         self.id = id
+        self.messageType = messageType
         self.title = title
+        self.body = body
     }
 }
 
-extension ElectricityMeter {
-    var stored: Stored<HomeControlKit.ElectricityMeter>? {
+extension Message {
+    var stored: Stored<HomeControlKit.Message>? {
         guard let id, let createdAt else { return nil }
         return .init(
             id: id,
             value: .init(
-                title: title
+                type: messageType,
+                title: title,
+                body: body
             ),
             createdAt: createdAt,
             updatedAt: updatedAt

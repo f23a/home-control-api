@@ -16,7 +16,7 @@ struct ElectricityMeterController: RouteCollection {
         electrictyMeters.get(use: index)
         electrictyMeters.post(use: create)
         try electrictyMeters.group(":id") { electricityMeter in
-            electricityMeter.delete(use: self.delete)
+            electricityMeter.delete(use: delete)
 
             try electricityMeter.register(collection: ElectricityMeterReadingController())
         }

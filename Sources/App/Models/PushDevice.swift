@@ -18,15 +18,18 @@ final class PushDevice: Model, Content, @unchecked Sendable  {
     @Field(key: "device_token")
     var deviceToken: String
 
-    @Timestamp(key: "createdAt", on: .create)
+    @Timestamp(key: "created_at", on: .create)
     var createdAt: Date?
 
-    @Timestamp(key: "updatedAt", on: .update)
+    @Timestamp(key: "updated_at", on: .update)
     var updatedAt: Date?
+
+    @Children(for: \.$pushDevice)
+    var messageTypeSettings: [PushDeviceMessageTypeSettings]
 
     init() { }
 
-    init(id: UUID?, deviceToken: String) {
+    init(id: UUID? = nil, deviceToken: String) {
         self.id = id
         self.deviceToken = deviceToken
     }

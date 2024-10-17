@@ -15,13 +15,13 @@ final class ForceChargingRange: Model, Content, @unchecked Sendable  {
     @ID(key: .id)
     var id: UUID?
 
-    @Field(key: "startsAt")
+    @Field(key: "starts_at")
     var startsAt: Date
 
-    @Field(key: "endsAt")
+    @Field(key: "ends_at")
     var endsAt: Date
 
-    @Field(key: "targetStateOfCharge")
+    @Field(key: "target_state_of_charge")
     var targetStateOfCharge: Double
 
     @Field(key: "state")
@@ -30,10 +30,10 @@ final class ForceChargingRange: Model, Content, @unchecked Sendable  {
     @Field(key: "source")
     var source: ForceChargingRangeSource
 
-    @Timestamp(key: "createdAt", on: .create)
+    @Timestamp(key: "created_at", on: .create)
     var createdAt: Date?
 
-    @Timestamp(key: "updatedAt", on: .update)
+    @Timestamp(key: "updated_at", on: .update)
     var updatedAt: Date?
 
     init() { }
@@ -49,6 +49,7 @@ final class ForceChargingRange: Model, Content, @unchecked Sendable  {
         self.id = id
         self.startsAt = startsAt
         self.endsAt = endsAt
+        self.targetStateOfCharge = targetStateOfCharge
         self.state = state
         self.source = source
     }

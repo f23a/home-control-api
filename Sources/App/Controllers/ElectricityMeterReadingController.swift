@@ -55,7 +55,10 @@ struct ElectricityMeterReadingController: RouteCollection {
 
     @Sendable
     func latest(req: Request) async throws -> Stored<HomeControlKit.ElectricityMeterReading> {
-        guard let latest = try await ElectricityMeterReading.query(on: req.db).sort(\.$readingAt, .descending).first() else {
+        guard let electricityMeter = try await ElectricityMeter.find(req.parameters.get("id"), on: req.db) else {
+            throw Abort(.notFound)
+        }
+        guard let latest = try await electricityMeter.$readings.query(on: req.db).sort(\.$readingAt, .descending).first() else {
             throw Abort(.notFound)
         }
         guard let result = latest.stored else { throw Abort(.internalServerError) }

@@ -27,8 +27,8 @@ struct CreateInverterReading: AsyncMigration {
             .field("daily_export_energy", .double)
             .field("daily_direct_energy_consumption", .double)
             .field("daily_battery_discharge_energy", .double)
-            .field("createdAt", .datetime)
-            .field("updatedAt", .datetime)
+            .field("created_at", .datetime)
+            .field("updated_at", .datetime)
             .create()
     }
 

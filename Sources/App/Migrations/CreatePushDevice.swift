@@ -12,8 +12,8 @@ struct CreatePushDevice: AsyncMigration {
         try await database.schema(PushDevice.schema)
             .id()
             .field("device_token", .string)
-            .field("createdAt", .datetime)
-            .field("updatedAt", .datetime)
+            .field("created_at", .datetime)
+            .field("updated_at", .datetime)
             .create()
     }
 

@@ -12,8 +12,8 @@ struct CreateSetting: AsyncMigration {
         try await database.schema(Setting.schema)
             .field("id", .string, .identifier(auto: false))
             .field("encoded_content", .string)
-            .field("createdAt", .datetime)
-            .field("updatedAt", .datetime)
+            .field("created_at", .datetime)
+            .field("updated_at", .datetime)
             .create()
     }
 

@@ -12,13 +12,13 @@ struct CreateForceChargingRange: AsyncMigration {
         try await database.schema(ForceChargingRange.schema)
             .id()
             .field("device_token", .string)
-            .field("startsAt", .datetime)
-            .field("endsAt", .datetime)
-            .field("targetStateOfCharge", .double)
+            .field("starts_at", .datetime)
+            .field("ends_at", .datetime)
+            .field("target_state_of_charge", .double)
             .field("state", .string)
             .field("source", .string)
-            .field("createdAt", .datetime)
-            .field("updatedAt", .datetime)
+            .field("created_at", .datetime)
+            .field("updated_at", .datetime)
             .create()
     }
 
