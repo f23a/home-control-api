@@ -46,15 +46,16 @@ public func configure(_ app: Application) async throws {
         tlsConfiguration: tlsConfiguration
     ), as: .mysql)
 
-    app.migrations.add(CreateInverterReading())
+    app.migrations.add(CreateAuthenticationToken())
     app.migrations.add(CreateElectricityMeter())
     app.migrations.add(CreateElectricityMeterReadings())
-    app.migrations.add(CreateAuthenticationToken())
-    app.migrations.add(CreatePushDevice())
-    app.migrations.add(CreateSetting())
+    app.migrations.add(CreateElectricityPrice())
     app.migrations.add(CreateForceChargingRange())
-    app.migrations.add(CreatePushDeviceMessageTypeSettings())
+    app.migrations.add(CreateInverterReading())
     app.migrations.add(CreateMessages())
+    app.migrations.add(CreatePushDevice())
+    app.migrations.add(CreatePushDeviceMessageTypeSettings())
+    app.migrations.add(CreateSetting())
 
     app.asyncCommands.use(CreateAuthenticationTokenCommand(), as: "create-authentication-token")
     app.asyncCommands.use(SendPushMessageCommand(), as: "send-push-message")
