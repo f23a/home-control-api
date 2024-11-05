@@ -86,7 +86,8 @@ struct MessageController: RouteCollection {
             alert: .init(title: .raw(model.title), body: .raw(model.body)),
             expiration: .none,
             priority: .immediately,
-            topic: "de.pageler.christoph.home-control.mobile"
+            topic: "de.pageler.christoph.home-control.mobile",
+            payload: PushMessagePayload(messageType: model.messageType)
         )
 
         var response = SendPushNotificationsResponse()
@@ -96,6 +97,7 @@ struct MessageController: RouteCollection {
                 response.numberOfSentNotifications += 1
             } catch {
                 response.numberOfFailedNotifications += 1
+                req.logger.critical("Failed to send push notification to \(pushDevice.deviceToken): \(error.localizedDescription)")
             }
         }
 
