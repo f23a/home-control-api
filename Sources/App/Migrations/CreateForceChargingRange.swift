@@ -11,7 +11,6 @@ struct CreateForceChargingRange: AsyncMigration {
     func prepare(on database: Database) async throws {
         try await database.schema(ForceChargingRange.schema)
             .id()
-            .field("device_token", .string)
             .field("starts_at", .datetime)
             .field("ends_at", .datetime)
             .field("target_state_of_charge", .double)

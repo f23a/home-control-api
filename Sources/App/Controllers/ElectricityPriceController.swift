@@ -14,6 +14,7 @@ struct ElectricityPriceController: RouteCollection {
         let electrictyPrices = routes.grouped("electricity_prices")
 
         electrictyPrices.get(use: index)
+        electrictyPrices.get("latest", use: latest)
         electrictyPrices.post(use: create)
         electrictyPrices.post("bulk", use: createBulk)
         electrictyPrices.group(":id") { electricityPrice in
@@ -24,6 +25,15 @@ struct ElectricityPriceController: RouteCollection {
     @Sendable
     func index(req: Request) async throws -> [Stored<HomeControlKit.ElectricityPrice>] {
         try await ElectricityPrice.query(on: req.db).all().compactMap { $0.stored }
+    }
+
+    @Sendable
+    func latest(req: Request) async throws -> Stored<HomeControlKit.ElectricityPrice> {
+        guard let latest = try await ElectricityPrice.query(on: req.db).sort(\.$startsAt, .descending).first() else {
+            throw Abort(.notFound)
+        }
+        guard let result = latest.stored else { throw Abort(.internalServerError) }
+        return result
     }
 
     @Sendable
