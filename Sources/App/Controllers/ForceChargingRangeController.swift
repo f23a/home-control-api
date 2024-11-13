@@ -28,14 +28,38 @@ struct ForceChargingRangeController: RouteCollection {
     }
 
     @Sendable
-    func query(req: Request) async throws -> [Stored<HomeControlKit.ForceChargingRange>] {
+    func query(req: Request) async throws -> QueryPage<Stored<HomeControlKit.ForceChargingRange>> {
         let query = try req.content.decode(HomeControlKit.ForceChargingRangeQuery.self)
         var builder = ForceChargingRange.query(on: req.db)
-        if let range = query.range {
-            builder = builder.filter(\.$startsAt >= range.startsAt)
-            builder = builder.filter(\.$endsAt <= range.endsAt)
+        for filter in query.filter {
+            switch filter {
+            case let .startsAt(filter):
+                builder = builder.filter(\.$startsAt, filter.method.fluentMethod, filter.value)
+            case let .endsAt(filter):
+                builder = builder.filter(\.$endsAt, filter.method.fluentMethod, filter.value)
+            }
         }
-        return try await builder.all().compactMap { $0.stored }
+        switch query.sort.value {
+        case .startsAt:
+            builder = builder.sort(\.$startsAt, query.sort.direction.fluentDirection)
+        case .endsAt:
+            builder = builder.sort(\.$endsAt, query.sort.direction.fluentDirection)
+        }
+        let page = try await builder.paginate(.init(page: query.pagination.page, per: query.pagination.per))
+        let storedItems = try page.items.map { model in
+            guard let stored = model.stored else {
+                throw Abort(.internalServerError)
+            }
+            return stored
+        }
+        return .init(
+            items: storedItems,
+            metadata: .init(
+                page: page.metadata.page,
+                per: page.metadata.per,
+                total: page.metadata.total
+            )
+        )
     }
 
     @Sendable

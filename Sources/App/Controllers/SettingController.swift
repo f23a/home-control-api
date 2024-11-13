@@ -44,7 +44,10 @@ struct SettingController: RouteCollection {
         let encodedContent: String
         switch id {
         case "adapter-sungrow-inverter":
-            let content = try req.content.decode(HomeControlKit.AdapterSungrowInverterSetting.self)
+            let content = try req.content.decode(AdapterSungrowInverterSetting.self)
+            encodedContent = try JSONEncoder().encode(content).base64EncodedString()
+        case "charge-finder":
+            let content = try req.content.decode(ChargeFinderSettings.self)
             encodedContent = try JSONEncoder().encode(content).base64EncodedString()
         default:
             throw Abort(.badRequest, reason: "Invalid type of setting")

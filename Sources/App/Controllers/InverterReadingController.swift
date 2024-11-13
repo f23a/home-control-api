@@ -13,17 +13,8 @@ struct InverterReadingController: RouteCollection {
     func boot(routes: RoutesBuilder) throws {
         let inverterReadings = routes.grouped("inverter_readings")
 
-        inverterReadings.get(use: index)
         inverterReadings.post(use: create)
         inverterReadings.get("latest", use: latest)
-    }
-
-    @Sendable
-    func index(req: Request) async throws -> [Stored<HomeControlKit.InverterReading>] {
-        try await InverterReading
-            .query(on: req.db)
-            .sort(\.$readingAt, .descending)
-            .all().compactMap { $0.stored }
     }
 
     @Sendable

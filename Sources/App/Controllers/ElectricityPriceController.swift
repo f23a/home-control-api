@@ -13,8 +13,7 @@ struct ElectricityPriceController: RouteCollection {
     func boot(routes: RoutesBuilder) throws {
         let electrictyPrices = routes.grouped("electricity_prices")
 
-        electrictyPrices.get(use: index)
-        electrictyPrices.get("latest", use: latest)
+        electrictyPrices.post("query", use: query)
         electrictyPrices.post(use: create)
         electrictyPrices.post("bulk", use: createBulk)
         electrictyPrices.group(":id") { electricityPrice in
@@ -23,17 +22,34 @@ struct ElectricityPriceController: RouteCollection {
     }
 
     @Sendable
-    func index(req: Request) async throws -> [Stored<HomeControlKit.ElectricityPrice>] {
-        try await ElectricityPrice.query(on: req.db).all().compactMap { $0.stored }
-    }
-
-    @Sendable
-    func latest(req: Request) async throws -> Stored<HomeControlKit.ElectricityPrice> {
-        guard let latest = try await ElectricityPrice.query(on: req.db).sort(\.$startsAt, .descending).first() else {
-            throw Abort(.notFound)
+    func query(req: Request) async throws -> QueryPage<Stored<HomeControlKit.ElectricityPrice>> {
+        let query = try req.content.decode(HomeControlKit.ElectricityPriceQuery.self)
+        var builder = ElectricityPrice.query(on: req.db)
+        for filter in query.filter {
+            switch filter {
+            case let .startsAt(filter):
+                builder = builder.filter(\.$startsAt, filter.method.fluentMethod, filter.value)
+            }
         }
-        guard let result = latest.stored else { throw Abort(.internalServerError) }
-        return result
+        switch query.sort.value {
+        case .startsAt:
+            builder = builder.sort(\.$startsAt, query.sort.direction.fluentDirection)
+        }
+        let page = try await builder.paginate(.init(page: query.pagination.page, per: query.pagination.per))
+        let storedItems = try page.items.map { model in
+            guard let stored = model.stored else {
+                throw Abort(.internalServerError)
+            }
+            return stored
+        }
+        return .init(
+            items: storedItems,
+            metadata: .init(
+                page: page.metadata.page,
+                per: page.metadata.per,
+                total: page.metadata.total
+            )
+        )
     }
 
     @Sendable
@@ -80,3 +96,5 @@ struct ElectricityPriceController: RouteCollection {
         return .noContent
     }
 }
+
+extension QueryPage: Content { }
