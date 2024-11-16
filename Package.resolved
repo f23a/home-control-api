@@ -1,5 +1,5 @@
 {
-  "originHash" : "a6c65b959198b66b97b530b6bb0b671a58195cbf9beea860acbbdfe9a61bd5d8",
+  "originHash" : "86f9d0ddeba489cb17293d78340c087fc70ce6e1c42f4d6d180be37f98cbd562",
   "pins" : [
     {
       "identity" : "apns",
@@ -80,6 +80,15 @@
       "state" : {
         "revision" : "bc3af6a1ade465f2f8c1cedfa475dd02457b90f7",
         "version" : "1.7.0"
+      }
+    },
+    {
+      "identity" : "home-control-logging",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/f23a/home-control-logging.git",
+      "state" : {
+        "revision" : "8f37597c3a4c17a2ea8235d4343feba6766756da",
+        "version" : "1.0.0"
       }
     },
     {

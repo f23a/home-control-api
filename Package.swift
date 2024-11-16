@@ -12,6 +12,7 @@ let package = Package(
         .package(url: "https://github.com/vapor/fluent-mysql-driver.git", from: "4.4.0"),
         .package(url: "https://github.com/apple/swift-nio.git", from: "2.65.0"),
         .package(url: "https://github.com/vapor/apns.git", from: "4.2.0"),
+        .package(url: "https://github.com/f23a/home-control-logging.git", from: "1.0.0"),
         .package(url: "https://github.com/f23a/home-control-kit.git", from: "1.7.0")
 //        .package(path: "../home-control-kit")
     ],
@@ -25,7 +26,8 @@ let package = Package(
                 .product(name: "NIOCore", package: "swift-nio"),
                 .product(name: "NIOPosix", package: "swift-nio"),
                 .product(name: "VaporAPNS", package: "apns"),
-                .product(name: "HomeControlKit", package: "home-control-kit")
+                .product(name: "HomeControlKit", package: "home-control-kit"),
+                .product(name: "HomeControlLogging", package: "home-control-logging")
             ],
             swiftSettings: swiftSettings
         ),

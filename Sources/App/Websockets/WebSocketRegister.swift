@@ -8,12 +8,16 @@
 import Foundation
 import Vapor
 import HomeControlKit
+import HomeControlLogging
+import Logging
 
 protocol WebSocketRegisterDelegate: AnyObject {
     func didUpdateRegisteredWebSockets()
 }
 
 class WebSocketRegister {
+    private let logger = Logger(homeControl: "api.websocket-register")
+
     var registeredWebSockets: [RegisteredWebSocket] = [] {
         didSet {
             delegate?.didUpdateRegisteredWebSockets()
@@ -34,13 +38,13 @@ class WebSocketRegister {
                 if registeredWebSocket.websocket.isClosed {
                     removeWebSocketIDs.append(registeredWebSocket.id)
                 } else {
-                    print("Failed to send to websocket \(error)")
+                    logger.critical("Failed to send to websocket \(error)")
                 }
             }
         }
 
         if !removeWebSocketIDs.isEmpty {
-            print("Remove \(removeWebSocketIDs.count) WebSockets")
+            logger.info("Remove \(removeWebSocketIDs.count) WebSockets")
             for removeWebSocketID in removeWebSocketIDs {
                 registeredWebSockets.removeAll(where: { $0.id == removeWebSocketID })
             }
