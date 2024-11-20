@@ -24,7 +24,11 @@ struct ForceChargingRangeController: RouteCollection {
 
     @Sendable
     func index(req: Request) async throws -> [Stored<HomeControlKit.ForceChargingRange>] {
-        try await ForceChargingRange.query(on: req.db).all().compactMap { $0.stored }
+        try await ForceChargingRange
+            .query(on: req.db)
+            .sort(\.$startsAt, .descending)
+            .all()
+            .compactMap { $0.stored }
     }
 
     @Sendable
@@ -37,6 +41,10 @@ struct ForceChargingRangeController: RouteCollection {
                 builder = builder.filter(\.$startsAt, filter.method.fluentMethod, filter.value)
             case let .endsAt(filter):
                 builder = builder.filter(\.$endsAt, filter.method.fluentMethod, filter.value)
+            case let .state(state):
+                builder = builder.filter(\.$state == state)
+            case let .source(source):
+                builder = builder.filter(\.$source == source)
             }
         }
         switch query.sort.value {
