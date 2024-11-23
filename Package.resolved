@@ -1,5 +1,5 @@
 {
-  "originHash" : "833c5f39df2f437ff0631e1ac5824cfad1073c56bd3cbab91b40df58b2e08e67",
+  "originHash" : "2f7b1bc20afea0211200c86a8be8dc0a3c0c8e24f2fe7a82204e95543b96f916",
   "pins" : [
     {
       "identity" : "apns",
@@ -78,8 +78,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/f23a/home-control-kit.git",
       "state" : {
-        "revision" : "44d5a69842f72ed61680fffc3473a4d0dc31b7a0",
-        "version" : "1.8.2"
+        "revision" : "bc203e6966942c3ab16912df9fb6f417cc11acca",
+        "version" : "1.8.3"
       }
     },
     {

@@ -23,7 +23,7 @@ struct ElectricityPriceController: RouteCollection {
 
     @Sendable
     func query(req: Request) async throws -> QueryPage<Stored<HomeControlKit.ElectricityPrice>> {
-        let query = try req.content.decode(HomeControlKit.ElectricityPriceQuery.self)
+        let query = try req.content.decode(ElectricityPriceQuery.self)
         var builder = ElectricityPrice.query(on: req.db)
         for filter in query.filter {
             switch filter {
@@ -96,5 +96,3 @@ struct ElectricityPriceController: RouteCollection {
         return .noContent
     }
 }
-
-extension QueryPage: Content { }

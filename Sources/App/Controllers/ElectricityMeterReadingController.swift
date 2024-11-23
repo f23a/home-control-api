@@ -13,22 +13,46 @@ struct ElectricityMeterReadingController: RouteCollection {
     func boot(routes: RoutesBuilder) throws {
         let electrictyMeterReadings = routes.grouped("readings")
 
-        electrictyMeterReadings.get(use: index)
+        electrictyMeterReadings.post("query", use: query)
         electrictyMeterReadings.post(use: create)
-        electrictyMeterReadings.get("latest", use: latest)
     }
 
     @Sendable
-    func index(req: Request) async throws -> [Stored<HomeControlKit.ElectricityMeterReading>] {
+    func query(req: Request) async throws -> QueryPage<Stored<HomeControlKit.ElectricityMeterReading>> {
         guard let model = try await ElectricityMeter.find(req.parameters.get("id"), on: req.db) else {
             throw Abort(.notFound)
         }
-
-        return try await model.$readings
-            .query(on: req.db)
-            .sort(\.$readingAt, .descending)
-            .all()
-            .compactMap { $0.stored }
+        let query = try req.content.decode(HomeControlKit.ElectricityMeterReadingQuery.self)
+        var builder = model.$readings.query(on: req.db)
+        for filter in query.filter {
+            switch filter {
+            case let .readingAt(filter):
+                builder = builder.filter(\.$readingAt, filter.method.fluentMethod, filter.value)
+            case let .power(filter):
+                builder = builder.filter(\.$power, filter.method.fluentMethod, filter.value)
+            }
+        }
+        switch query.sort.value {
+        case .readingAt:
+            builder = builder.sort(\.$readingAt, query.sort.direction.fluentDirection)
+        case .power:
+            builder = builder.sort(\.$power, query.sort.direction.fluentDirection)
+        }
+        let page = try await builder.paginate(.init(page: query.pagination.page, per: query.pagination.per))
+        let storedItems = try page.items.map { model in
+            guard let stored = model.stored else {
+                throw Abort(.internalServerError)
+            }
+            return stored
+        }
+        return .init(
+            items: storedItems,
+            metadata: .init(
+                page: page.metadata.page,
+                per: page.metadata.per,
+                total: page.metadata.total
+            )
+        )
     }
 
     @Sendable
@@ -51,17 +75,5 @@ struct ElectricityMeterReadingController: RouteCollection {
         }
 
         return stored
-    }
-
-    @Sendable
-    func latest(req: Request) async throws -> Stored<HomeControlKit.ElectricityMeterReading> {
-        guard let electricityMeter = try await ElectricityMeter.find(req.parameters.get("id"), on: req.db) else {
-            throw Abort(.notFound)
-        }
-        guard let latest = try await electricityMeter.$readings.query(on: req.db).sort(\.$readingAt, .descending).first() else {
-            throw Abort(.notFound)
-        }
-        guard let result = latest.stored else { throw Abort(.internalServerError) }
-        return result
     }
 }

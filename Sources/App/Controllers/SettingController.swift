@@ -24,7 +24,6 @@ struct SettingController: RouteCollection {
         guard let setting = try await Setting.find(req.parameters.get("id"), on: req.db) else {
             throw Abort(.notFound)
         }
-        guard let id = setting.id else { throw Abort(.internalServerError) }
         guard let data = Data(base64Encoded: setting.encodedContent) else {
             throw Abort(.internalServerError)
         }

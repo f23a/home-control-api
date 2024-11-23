@@ -13,22 +13,12 @@ struct ForceChargingRangeController: RouteCollection {
     func boot(routes: RoutesBuilder) throws {
         let forceChargingRanges = routes.grouped("force_charging_ranges")
 
-        forceChargingRanges.get(use: index)
         forceChargingRanges.post("query", use: query)
         forceChargingRanges.post(use: create)
         forceChargingRanges.group(":id") { forceChargingRange in
             forceChargingRange.put(use: update)
             forceChargingRange.delete(use: delete)
         }
-    }
-
-    @Sendable
-    func index(req: Request) async throws -> [Stored<HomeControlKit.ForceChargingRange>] {
-        try await ForceChargingRange
-            .query(on: req.db)
-            .sort(\.$startsAt, .descending)
-            .all()
-            .compactMap { $0.stored }
     }
 
     @Sendable
