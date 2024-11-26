@@ -27,7 +27,7 @@ public func configure(_ app: Application) async throws {
             keyIdentifier: try Environment.require("APNS_KEY_IDENTIFIER"),
             teamIdentifier: try Environment.require("APNS_TEAM_IDENTIFIER")
         ),
-        environment: .development
+        environment: .production
     )
     app.apns.containers.use(
         apnsConfig,
