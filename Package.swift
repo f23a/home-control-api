@@ -13,7 +13,7 @@ let package = Package(
         .package(url: "https://github.com/apple/swift-nio.git", from: "2.65.0"),
         .package(url: "https://github.com/vapor/apns.git", from: "4.2.0"),
         .package(url: "https://github.com/f23a/home-control-logging.git", from: "1.0.0"),
-        .package(url: "https://github.com/f23a/home-control-kit.git", from: "1.8.3")
+        .package(url: "https://github.com/f23a/home-control-kit.git", from: "1.8.4")
 //        .package(path: "../home-control-kit")
     ],
     targets: [

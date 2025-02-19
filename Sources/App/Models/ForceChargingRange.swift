@@ -30,6 +30,9 @@ final class ForceChargingRange: Model, Content, @unchecked Sendable  {
     @Field(key: "source")
     var source: ForceChargingRangeSource
 
+    @Field(key: "is_vehicle_charging_allowed")
+    var isVehicleChargingAllowed: Bool
+
     @Timestamp(key: "created_at", on: .create)
     var createdAt: Date?
 
@@ -65,7 +68,8 @@ extension ForceChargingRange {
                 endsAt: endsAt,
                 targetStateOfCharge: targetStateOfCharge,
                 state: state,
-                source: source
+                source: source,
+                isVehicleChargingAllowed: isVehicleChargingAllowed
             ),
             createdAt: createdAt,
             updatedAt: updatedAt

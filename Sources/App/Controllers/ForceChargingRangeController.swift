@@ -87,6 +87,7 @@ struct ForceChargingRangeController: RouteCollection {
         model.targetStateOfCharge = content.targetStateOfCharge
         model.state = content.state
         model.source = content.source
+        model.isVehicleChargingAllowed = content.isVehicleChargingAllowed
 
         try await model.save(on: req.db)
         guard let stored = model.stored else { throw Abort(.internalServerError) }
