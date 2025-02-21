@@ -68,7 +68,8 @@ struct ForceChargingRangeController: RouteCollection {
             endsAt: content.endsAt,
             targetStateOfCharge: content.targetStateOfCharge,
             state: content.state,
-            source: content.source
+            source: content.source,
+            isVehicleChargingAllowed: content.isVehicleChargingAllowed
         )
 
         try await model.save(on: req.db)

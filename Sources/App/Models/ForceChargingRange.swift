@@ -47,7 +47,8 @@ final class ForceChargingRange: Model, Content, @unchecked Sendable  {
         endsAt: Date,
         targetStateOfCharge: Double,
         state: ForceChargingRangeState,
-        source: ForceChargingRangeSource
+        source: ForceChargingRangeSource,
+        isVehicleChargingAllowed: Bool
     ) {
         self.id = id
         self.startsAt = startsAt
@@ -55,6 +56,7 @@ final class ForceChargingRange: Model, Content, @unchecked Sendable  {
         self.targetStateOfCharge = targetStateOfCharge
         self.state = state
         self.source = source
+        self.isVehicleChargingAllowed = isVehicleChargingAllowed
     }
 }
 
